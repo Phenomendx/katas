@@ -8,7 +8,7 @@ public class RoverCommandFactory {
   private static Map<String, Supplier<RoverCommand>> commandFactory = Map.of(
       "R", RightCommand::new,
       "L", LeftCommand::new,
-      "M", RightCommand::new
+      "M", MoveCommand::new
   );
 
 

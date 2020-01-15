@@ -42,7 +42,7 @@ public class RoverShould {
   @Test
   void move_rover() {
 
-    String expectedPosition = "1:0:N";
+    String expectedPosition = "0:1:N";
 
     final String actualPosition = rover.execute("M");
 
