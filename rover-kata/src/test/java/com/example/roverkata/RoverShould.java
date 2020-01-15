@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -48,6 +49,7 @@ public class RoverShould {
       "M,S,0:-1:S",
       "MM,S,0:-2:S",
       "M,W,-1:0:W",
+      "MM,W,-2:0:W",
   })
   void move_rover(String command, String initialDirection, String expectedLocation) {
 
@@ -56,6 +58,22 @@ public class RoverShould {
     final String actualLocation = rover.execute(command);
 
     assertEquals(expectedLocation, actualLocation);
+  }
+
+
+  @ParameterizedTest
+  @CsvSource({
+      "MR,N,0:1:E",
+      "RM,N,1:0:E",
+  })
+  void move_and_rotate(String command, String initialDirection, String expectedLocation) {
+
+    givenInitialRoverLocation(new Position(0, 0), setDirection(initialDirection));
+
+    final String actualLocation = rover.execute(command);
+
+    assertEquals(expectedLocation, actualLocation);
+
   }
 
   private CompasDirection setDirection(String initialDirection) {
