@@ -18,4 +18,16 @@ public class Position {
   public int increaseY() {
     return ++y;
   }
+
+  public int increaseX() {
+    return ++x;
+  }
+
+  public int decreaseY() {
+    return --y;
+  }
+
+  public int decreaseX() {
+    return --x;
+  }
 }

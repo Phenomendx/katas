@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 public class Rover {
 
-  private RoverLocation roverLocation = new RoverLocation();
+  private RoverLocation roverLocation = new RoverLocation(new Position(0,0), CompasDirection.NORTH);
 
   private Consumer<String> executeCommandAndChangeRoverLocation = command ->
       roverLocation = RoverCommandFactory.createRoverCommand(command).execute(roverLocation);
@@ -20,6 +20,9 @@ public class Rover {
     return roverLocation.getLocation();
   }
 
+  protected void setLocation(RoverLocation roverLocation) {
+    this.roverLocation = roverLocation;
+  }
 }
 
 

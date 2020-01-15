@@ -2,8 +2,8 @@ package com.example.roverkata;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -32,26 +32,43 @@ public class RoverShould {
   })
   void rotate_rover(String command, String expectedLocation) {
 
-    givenTheInitialOrientation(CompasDirection.EAST);
+    givenInitialRoverLocation(new Position(0, 0), CompasDirection.EAST);
 
     String actualLocation = rover.execute(command);
 
     assertEquals(expectedLocation, actualLocation);
   }
 
-  @Test
-  void move_rover() {
+  @ParameterizedTest
+  @CsvSource({
+      "M,N,0:1:N",
+      "MM,N,0:2:N",
+      "M,E,1:0:E",
+      "MM,E,2:0:E",
+      "M,S,0:-1:S",
+      "MM,S,0:-2:S",
+      "M,W,-1:0:W",
+  })
+  void move_rover(String command, String initialDirection, String expectedLocation) {
 
-    String expectedPosition = "0:1:N";
+    givenInitialRoverLocation(new Position(0, 0), setDirection(initialDirection));
 
-    final String actualPosition = rover.execute("M");
+    final String actualLocation = rover.execute(command);
 
-    assertEquals(expectedPosition, actualPosition);
+    assertEquals(expectedLocation, actualLocation);
   }
 
-  private void givenTheInitialOrientation(CompasDirection roverInitialOrientation) {
-    if (roverInitialOrientation.equals(CompasDirection.EAST)) {
-      rover.execute("R");
-    }
+  private CompasDirection setDirection(String initialDirection) {
+    Map<String, CompasDirection> directions = Map.of(
+        "N", CompasDirection.NORTH,
+        "E", CompasDirection.EAST,
+        "S", CompasDirection.SOUTH,
+        "W", CompasDirection.WEST
+    );
+    return directions.get(initialDirection);
+  }
+
+  private void givenInitialRoverLocation(Position position, CompasDirection direction) {
+    rover.setLocation(new RoverLocation(position, direction));
   }
 }
