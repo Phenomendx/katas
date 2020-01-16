@@ -4,9 +4,10 @@ import static com.example.roverkata.CompasDirection.EAST;
 import static com.example.roverkata.CompasDirection.NORTH;
 import static com.example.roverkata.CompasDirection.SOUTH;
 import static com.example.roverkata.CompasDirection.WEST;
+import static com.example.roverkata.TestUtility.givenInitialRoverLocation;
+import static com.example.roverkata.TestUtility.givenRoverHasObstacles;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -77,7 +78,7 @@ public class RoverShould {
   @Test
   void rover_stops_when_obstacles() {
 
-    Rover rover = givenRoverHasAnObstacleAt(List.of("0:2:N"));
+    Rover rover = givenRoverHasObstacles(List.of("0:2:N"));
 
     String actualLocation = rover.execute("MM");
 
@@ -93,14 +94,4 @@ public class RoverShould {
     );
     return directions.get(initialDirection);
   }
-
-  private Rover givenRoverHasAnObstacleAt(List<String> obstacles) {
-    return new Rover(obstacles, new RoverLocation(new Position(0, 0), NORTH));
-  }
-
-  private Rover givenInitialRoverLocation(Position position, CompasDirection initialDirection) {
-    return new Rover(Collections.emptyList(), new RoverLocation(new Position(0, 0), initialDirection));
-  }
-
-
 }

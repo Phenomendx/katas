@@ -1,23 +1,20 @@
 package com.example.roverkata;
 
 import static com.example.roverkata.CompasDirection.NORTH;
+import static com.example.roverkata.TestUtility.givenInitialRoverLocation;
+import static com.example.roverkata.TestUtility.givenRoverHasObstacles;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Collections;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class RoverFeature {
 
   private Rover rover;
 
-  @BeforeEach
-  void setUp() {
-    rover = givenInitialRoverLocation(new Position(0, 0), NORTH);
-  }
-
   @Test
   void no_obstacles() {
+    rover = givenInitialRoverLocation(new Position(0, 0), NORTH);
 
     String actualLocation = rover.execute("MMRMMLM");
 
@@ -26,6 +23,7 @@ public class RoverFeature {
 
   @Test
   void wrap_around() {
+    rover = givenInitialRoverLocation(new Position(0, 0), NORTH);
 
     String actualLocation = rover.execute("MMMMMMMMMM");
 
@@ -34,14 +32,11 @@ public class RoverFeature {
 
   @Test
   void with_obstacles() {
+    Rover rover = givenRoverHasObstacles(List.of("0:3:N"));
 
     String actualLocation = rover.execute("MMMM");
 
     assertEquals("0:0:2:N", actualLocation);
-  }
-
-  private Rover givenInitialRoverLocation(Position position, CompasDirection setDirection) {
-    return new Rover(Collections.emptyList(), new RoverLocation(new Position(0, 0), setDirection));
   }
 
 }
