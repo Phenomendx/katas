@@ -1,21 +1,20 @@
 package com.example.roverkata;
 
+import static com.example.roverkata.CompasDirection.EAST;
+import static com.example.roverkata.CompasDirection.NORTH;
+import static com.example.roverkata.CompasDirection.SOUTH;
+import static com.example.roverkata.CompasDirection.WEST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 public class RoverShould {
 
-  private Rover rover;
-
-  @BeforeEach
-  void setUp() {
-    rover = new Rover();
-  }
 
   @ParameterizedTest
   @CsvSource({
@@ -33,7 +32,7 @@ public class RoverShould {
   })
   void rotate_rover(String command, String expectedLocation) {
 
-    givenInitialRoverLocation(new Position(0, 0), CompasDirection.EAST);
+    Rover rover = givenInitialRoverLocation(new Position(0, 0), EAST);
 
     String actualLocation = rover.execute(command);
 
@@ -53,13 +52,12 @@ public class RoverShould {
   })
   void move_rover(String command, String initialDirection, String expectedLocation) {
 
-    givenInitialRoverLocation(new Position(0, 0), setDirection(initialDirection));
+    Rover rover = givenInitialRoverLocation(new Position(0, 0), setDirection(initialDirection));
 
     final String actualLocation = rover.execute(command);
 
     assertEquals(expectedLocation, actualLocation);
   }
-
 
   @ParameterizedTest
   @CsvSource({
@@ -68,7 +66,7 @@ public class RoverShould {
   })
   void move_and_rotate(String command, String initialDirection, String expectedLocation) {
 
-    givenInitialRoverLocation(new Position(0, 0), setDirection(initialDirection));
+    Rover rover = givenInitialRoverLocation(new Position(0, 0), setDirection(initialDirection));
 
     final String actualLocation = rover.execute(command);
 
@@ -76,17 +74,33 @@ public class RoverShould {
 
   }
 
+  @Test
+  void rover_stops_when_obstacles() {
+
+    Rover rover = givenRoverHasAnObstacleAt(List.of("0:2:N"));
+
+    String actualLocation = rover.execute("MM");
+
+    assertEquals("0:0:1:N", actualLocation);
+  }
+
   private CompasDirection setDirection(String initialDirection) {
     Map<String, CompasDirection> directions = Map.of(
-        "N", CompasDirection.NORTH,
-        "E", CompasDirection.EAST,
-        "S", CompasDirection.SOUTH,
-        "W", CompasDirection.WEST
+        "N", NORTH,
+        "E", EAST,
+        "S", SOUTH,
+        "W", WEST
     );
     return directions.get(initialDirection);
   }
 
-  private void givenInitialRoverLocation(Position position, CompasDirection direction) {
-    rover.setLocation(new RoverLocation(position, direction));
+  private Rover givenRoverHasAnObstacleAt(List<String> obstacles) {
+    return new Rover(obstacles, new RoverLocation(new Position(0, 0), NORTH));
   }
+
+  private Rover givenInitialRoverLocation(Position position, CompasDirection initialDirection) {
+    return new Rover(Collections.emptyList(), new RoverLocation(new Position(0, 0), initialDirection));
+  }
+
+
 }

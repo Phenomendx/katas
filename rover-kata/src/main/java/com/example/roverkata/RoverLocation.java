@@ -1,13 +1,20 @@
 package com.example.roverkata;
 
-public class RoverLocation {
+import static com.example.roverkata.CompasDirection.*;
+
+public class RoverLocation implements Cloneable {
 
   private Position roverPosition;
-  private CompasDirection roverDirection;
+  private CompasDirection roverDirection = NORTH;
 
   public RoverLocation(Position position, CompasDirection direction) {
     roverPosition = position;
     roverDirection = direction;
+  }
+
+  public RoverLocation(RoverLocation that) {
+    this.roverPosition = new Position(that.roverPosition);
+    this.roverDirection = that.roverDirection;
   }
 
   public CompasDirection getRoverDirection() {
@@ -38,4 +45,5 @@ public class RoverLocation {
   public void advanceOnWest() {
     roverPosition.decreaseX();
   }
+
 }

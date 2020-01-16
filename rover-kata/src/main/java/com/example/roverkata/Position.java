@@ -10,12 +10,20 @@ public class Position {
     this.y = y;
   }
 
+  public Position(Position that) {
+   this.x = that.x;
+   this.y = that.y;
+  }
+
   @Override
   public String toString() {
     return x + ":" + y + ":";
   }
 
   public int increaseY() {
+    if (y == 9) {
+      return y = 0;
+    }
     return ++y;
   }
 
